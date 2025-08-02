@@ -1,0 +1,51 @@
+const int ledVermelho = 2;
+const int ledVerde = 3;
+const int ledAzul = 4;
+
+const int botao = 5;
+
+int estado = 0;               
+bool botaoAnterior = LOW;
+unsigned long debounceDelay = 50; 
+unsigned long ultimaLeitura = 0;
+
+void setup() {
+  pinMode(ledVermelho, OUTPUT);
+  pinMode(ledVerde, OUTPUT);
+  pinMode(ledAzul, OUTPUT);
+  pinMode(botao, INPUT);
+
+  digitalWrite(ledVermelho, LOW);
+  digitalWrite(ledVerde, LOW);
+  digitalWrite(ledAzul, LOW);
+}
+
+void loop() {
+  bool leituraBotao = digitalRead(botao);
+
+  if (leituraBotao == HIGH && botaoAnterior == LOW && (millis() - ultimaLeitura) > debounceDelay) {
+    ultimaLeitura = millis();
+    estado++; 
+    if (estado > 3) {
+    
+    }
+
+    atualizarLEDs(estado);
+  }
+
+  botaoAnterior = leituraBotao;
+}
+
+void atualizarLEDs(int estado) {
+  digitalWrite(ledVermelho, LOW);
+  digitalWrite(ledVerde, LOW);
+  digitalWrite(ledAzul, LOW);
+
+  if (estado == 1) {
+    digitalWrite(ledVermelho, HIGH);
+  } else if (estado == 2) {
+    digitalWrite(ledVerde, HIGH);
+  } else if (estado == 3) {
+    digitalWrite(ledAzul, HIGH);
+  }
+}
