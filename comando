@@ -1,51 +1,38 @@
-const int ledVermelho = 2;
-const int ledVerde = 3;
-const int ledAzul = 4;
+int led1 = D1;
+#define led2  D2
 
-const int botao = 5;
+char coisa;
 
-int estado = 0;               
-bool botaoAnterior = LOW;
-unsigned long debounceDelay = 50; 
-unsigned long ultimaLeitura = 0;
-
-void setup() {
-  pinMode(ledVermelho, OUTPUT);
-  pinMode(ledVerde, OUTPUT);
-  pinMode(ledAzul, OUTPUT);
-  pinMode(botao, INPUT);
-
-  digitalWrite(ledVermelho, LOW);
-  digitalWrite(ledVerde, LOW);
-  digitalWrite(ledAzul, LOW);
+void setup()
+{
+Serial.begin(115200);
+pinMode(led1 , OUTPUT);
+pinMode(led2 , OUTPUT);
 }
 
-void loop() {
-  bool leituraBotao = digitalRead(botao);
+void loop()
+{
+if(Serial.available()>0)
+{
+  coisa = Serial.read();
+  switch(coisa)
+  {
+    case 'A':
+    digitalWrite(led1 , HIGH);
+    break;
 
-  if (leituraBotao == HIGH && botaoAnterior == LOW && (millis() - ultimaLeitura) > debounceDelay) {
-    ultimaLeitura = millis();
-    estado++; 
-    if (estado > 3) {
-    
-    }
+    case 'a':
+    digitalWrite(led1 , LOW);
+    break;
+   
+    case 'B':
+    digitalWrite(led2 , HIGH);
+    break;
 
-    atualizarLEDs(estado);
+    case 'b':
+    digitalWrite(led2 , LOW);
+    break;
+   
   }
-
-  botaoAnterior = leituraBotao;
-}
-
-void atualizarLEDs(int estado) {
-  digitalWrite(ledVermelho, LOW);
-  digitalWrite(ledVerde, LOW);
-  digitalWrite(ledAzul, LOW);
-
-  if (estado == 1) {
-    digitalWrite(ledVermelho, HIGH);
-  } else if (estado == 2) {
-    digitalWrite(ledVerde, HIGH);
-  } else if (estado == 3) {
-    digitalWrite(ledAzul, HIGH);
-  }
+ }
 }
